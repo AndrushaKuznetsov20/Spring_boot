@@ -53,7 +53,6 @@ public class AnnouncmentService {
             existingAnnouncement.setName(announcement.getName());
             existingAnnouncement.setDescription(announcement.getDescription());
             existingAnnouncement.setConditions_and_requirements(announcement.getConditions_and_requirements());
-            existingAnnouncement.setContract_status(announcement.getContract_status());
             return announcementRepository.save(existingAnnouncement);
         }
         return null;
