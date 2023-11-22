@@ -38,7 +38,7 @@ public class Announcement {
 //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listUser")
 //    private Set<User> list_users = new HashSet<>();
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "list_users")
     private List<User> list_users;
 

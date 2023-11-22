@@ -39,7 +39,7 @@ public class UserService {
             return ResponseEntity.ok("Пользователь с таким Email уже существует!");
         }
         user.setActive(true);
-        user.getRoles().add(Role.ROLE_ADMIN);
+        user.getRoles().add(Role.ROLE_USER);
 
         userRepository.save(user);
 

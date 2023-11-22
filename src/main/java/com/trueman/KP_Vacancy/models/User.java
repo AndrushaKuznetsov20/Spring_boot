@@ -35,6 +35,9 @@ public class User implements UserDetails {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "avatar")
+    private byte[] avatar;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))

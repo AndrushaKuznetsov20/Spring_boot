@@ -12,7 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,10 +107,14 @@ public class UserController {
     {
         User existsUser = userRepository.findByName(user.getName());
 
-        userService.createUser(user);
-
-        return ResponseEntity.ok("Вы успешно зарегистрировались !");
-
+        if (!existsUser.isUser())
+        {
+            userService.createUser(user);
+            return ResponseEntity.ok("Вы успешно зарегистрировались !");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Пользователь с таким именем уже существует!");
+        }
     }
 
     @PostMapping("/login")
@@ -160,5 +166,20 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("Пользователь успешно удалён");
+    }
+
+    @PostMapping("/user/{userId}/avatar")
+    public ResponseEntity<String> uploadAvatar(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file)
+    {
+        try{
+            User user = userRepository.findById(userId).orElse(null);
+            user.setAvatar(file.getBytes());
+            userRepository.save(user);
+            return ResponseEntity.ok("Аватар успешно загружен!");
+        }
+        catch (IOException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Аватар не был загружен!");
+        }
     }
 }

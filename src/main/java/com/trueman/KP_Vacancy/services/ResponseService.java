@@ -45,12 +45,8 @@ public class ResponseService {
         response.setUser_response(user);
         Response savedResponse = responseRepository.save(response);
 
-        if (announcement != null && user != null) {
-//            Set<User> announcementSet = announcement.getList_users();
-//            announcementSet.add(user);
-            announcement.getList_users().add(user);
-            announcementRepository.save(announcement);
-        }
+        announcement.getList_users().add(user);
+        announcementRepository.save(announcement);
         return savedResponse;
     }
 
