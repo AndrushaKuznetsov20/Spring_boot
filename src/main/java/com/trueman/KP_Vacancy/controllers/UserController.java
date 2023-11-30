@@ -5,8 +5,11 @@ import com.trueman.KP_Vacancy.models.User;
 import com.trueman.KP_Vacancy.models.enums.Role;
 import com.trueman.KP_Vacancy.repositories.UserRepository;
 import com.trueman.KP_Vacancy.services.UserService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,12 +173,25 @@ public class UserController {
         return ResponseEntity.ok("Пользователь успешно удалён");
     }
 
-    @PostMapping("/user/{userId}/avatar")
+    @GetMapping("/user/{userId}/getAvatar")
+    public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        byte[] avatarUrl = user.getAvatar();
+        if (avatarUrl != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG); // Установите правильный MediaType для вашего изображения
+            return new ResponseEntity<>(avatarUrl, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/user/{userId}/avatar")
     public ResponseEntity<String> uploadAvatar(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file)
     {
         try{
             User user = userRepository.findById(userId).orElse(null);
-            user.setAvatar(file.getBytes());
+            byte[] fileBytes = Files.readAllBytes(Paths.get(file.getOriginalFilename()));
+            user.setAvatar(fileBytes);
             userRepository.save(user);
             return ResponseEntity.ok("Аватар успешно загружен!");
         }
