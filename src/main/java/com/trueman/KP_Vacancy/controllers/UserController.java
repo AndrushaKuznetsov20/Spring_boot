@@ -149,6 +149,10 @@ public class UserController {
                     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
+            else
+            {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         else
         {
@@ -173,31 +177,31 @@ public class UserController {
         return ResponseEntity.ok("Пользователь успешно удалён");
     }
 
-    @GetMapping("/user/{userId}/getAvatar")
-    public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        byte[] avatarUrl = user.getAvatar();
-        if (avatarUrl != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_PNG); // Установите правильный MediaType для вашего изображения
-            return new ResponseEntity<>(avatarUrl, headers, HttpStatus.OK);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    @PutMapping("/user/{userId}/avatar")
-    public ResponseEntity<String> uploadAvatar(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file)
-    {
-        try{
-            User user = userRepository.findById(userId).orElse(null);
-            byte[] fileBytes = Files.readAllBytes(Paths.get(file.getOriginalFilename()));
-            user.setAvatar(fileBytes);
-            userRepository.save(user);
-            return ResponseEntity.ok("Аватар успешно загружен!");
-        }
-        catch (IOException e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Аватар не был загружен!");
-        }
-    }
+//    @GetMapping("/user/{userId}/getAvatar")
+//    public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long userId) {
+//        User user = userRepository.findById(userId).orElse(null);
+//        byte[] avatarUrl = user.getAvatar();
+//        if (avatarUrl != null) {
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.IMAGE_PNG); // Установите правильный MediaType для вашего изображения
+//            return new ResponseEntity<>(avatarUrl, headers, HttpStatus.OK);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+//    @PutMapping("/user/{userId}/avatar")
+//    public ResponseEntity<String> uploadAvatar(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file)
+//    {
+//        try{
+//            User user = userRepository.findById(userId).orElse(null);
+//            byte[] fileBytes = Files.readAllBytes(Paths.get(file.getOriginalFilename()));
+//            user.setAvatar(fileBytes);
+//            userRepository.save(user);
+//            return ResponseEntity.ok("Аватар успешно загружен!");
+//        }
+//        catch (IOException e)
+//        {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Аватар не был загружен!");
+//        }
+//    }
 }
