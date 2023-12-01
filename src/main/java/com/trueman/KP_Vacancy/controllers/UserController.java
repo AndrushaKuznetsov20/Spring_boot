@@ -118,7 +118,7 @@ public class UserController {
             return ResponseEntity.ok("Вы успешно зарегистрировались !");
         }
         else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Пользователь с таким именем уже существует!");
+            return ResponseEntity.ok("Пользователь с таким именем уже существует!");
         }
     }
 
@@ -126,7 +126,6 @@ public class UserController {
     public ResponseEntity<User> loginUser(@RequestBody User user) {
 
         User existingUser = userRepository.findByName(user.getName());
-
         String checkPassword = existingUser.getPassword();
         if(existingUser.isActive())
         {
@@ -149,16 +148,12 @@ public class UserController {
                     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
-            else
-            {
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
         }
         else
         {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/update/{id}")
