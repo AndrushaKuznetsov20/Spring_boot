@@ -112,7 +112,7 @@ public class UserController {
     {
         User existsUser = userRepository.findByName(user.getName());
 
-        if (!existsUser.isUser())
+        if (existsUser == null)
         {
             userService.createUser(user);
             return ResponseEntity.ok("Вы успешно зарегистрировались !");
