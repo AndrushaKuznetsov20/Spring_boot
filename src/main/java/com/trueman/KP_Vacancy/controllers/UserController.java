@@ -128,37 +128,38 @@ public class UserController {
         User existingUser = userRepository.findByName(user.getName());
         String checkPassword = existingUser.getPassword();
 
-        if(existingUser.isActive())
-        {
             if (existingUser != null)
             {
-                if (user.getPassword().equals(checkPassword))
+                if(existingUser.isActive())
                 {
-                    if (existingUser.isUser()) {
-                        return ResponseEntity.ok(existingUser);
+                    if (user.getPassword().equals(checkPassword))
+                    {
+                        if (existingUser.isUser()) {
+                            return ResponseEntity.ok(existingUser);
+                        }
+                        if (existingUser.isAdmin()) {
+                            return ResponseEntity.ok(existingUser);
+                        }
+                        if (existingUser.isModer()) {
+                            return ResponseEntity.ok(existingUser);
+                        }
                     }
-                    if (existingUser.isAdmin()) {
-                        return ResponseEntity.ok(existingUser);
-                    }
-                    if (existingUser.isModer()) {
-                        return ResponseEntity.ok(existingUser);
+                    else
+                    {
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                     }
                 }
                 else
                 {
-                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             }
-            else {
+            else
+            {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-        }
-        else
-        {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
