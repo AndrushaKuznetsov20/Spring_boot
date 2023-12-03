@@ -118,7 +118,7 @@ public class UserController {
             return ResponseEntity.ok("Вы успешно зарегистрировались !");
         }
         else {
-            return ResponseEntity.ok("Пользователь с таким именем уже существует!");
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -127,6 +127,7 @@ public class UserController {
 
         User existingUser = userRepository.findByName(user.getName());
         String checkPassword = existingUser.getPassword();
+
         if(existingUser.isActive())
         {
             if (existingUser != null)
@@ -147,6 +148,9 @@ public class UserController {
                 {
                     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         }
         else
