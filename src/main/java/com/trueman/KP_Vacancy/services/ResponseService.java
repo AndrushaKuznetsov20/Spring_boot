@@ -38,16 +38,18 @@ public class ResponseService {
     }
 
     public Response createResponse(Long announcementId, Long userId) {
-        Response response = new Response();
         Announcement announcement = announcementRepository.findById(announcementId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
-        response.setAnnouncement(announcement);
-        response.setUser_response(user);
-        Response savedResponse = responseRepository.save(response);
 
-        announcement.getList_users().add(user);
-        announcementRepository.save(announcement);
-        return savedResponse;
+            Response response = new Response();
+
+            response.setAnnouncement(announcement);
+            response.setUser_response(user);
+            Response savedResponse = responseRepository.save(response);
+
+            announcement.getList_users().add(user);
+            announcementRepository.save(announcement);
+            return savedResponse;
     }
 
     public void deleteResponse(Long id) {

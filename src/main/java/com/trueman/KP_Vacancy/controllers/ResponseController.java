@@ -57,11 +57,20 @@ public class ResponseController {
 
     }
 
-    @PostMapping("/addResponses/{announcement}/{user_response}")
-    public ResponseEntity<String> createResponse(@PathVariable("announcement") Long announcement, @PathVariable("user_response") Long user_response)
+    @PostMapping("/addResponses/{announcementId}/{user_responseId}")
+    public ResponseEntity<String> createResponse(@PathVariable("announcementId") Long announcementId, @PathVariable("user_responseId") Long user_responseId)
     {
-        responseService.createResponse(announcement,user_response);
-        return ResponseEntity.ok("Отклик успешно оставлен!");
+
+        List<Response> existingResponses = responseRepository.findByAnnouncementIdAndUser_responseId(announcementId, user_responseId);
+        if(existingResponses.isEmpty())
+        {
+            responseService.createResponse(announcementId,user_responseId);
+            return ResponseEntity.ok("Отклик успешно оставлен!");
+        }
+        else
+        {
+            return ResponseEntity.ok("Вы уже оставили отклик на данное объявление !");
+        }
     }
 
     @DeleteMapping("/delete/{announcementId}")

@@ -3,9 +3,11 @@ package com.trueman.KP_Vacancy.services;
 import com.trueman.KP_Vacancy.models.Announcement;
 import com.trueman.KP_Vacancy.models.User;
 import com.trueman.KP_Vacancy.repositories.AnnouncementRepository;
+import com.trueman.KP_Vacancy.repositories.ResponseRepository;
 import com.trueman.KP_Vacancy.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +15,9 @@ import java.util.List;
 public class AnnouncmentService {
     @Autowired
     private AnnouncementRepository announcementRepository;
+
+    @Autowired
+    private ResponseRepository responseRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -57,8 +62,9 @@ public class AnnouncmentService {
         }
         return null;
     }
-
+    @Transactional
     public void deleteAnnouncement(Long id) {
+        responseRepository.deleteByAnnouncementId(id);
         announcementRepository.deleteById(id);
     }
 }
