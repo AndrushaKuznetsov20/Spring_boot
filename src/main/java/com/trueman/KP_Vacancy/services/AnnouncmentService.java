@@ -30,7 +30,8 @@ public class AnnouncmentService {
         return announcementRepository.findAll();
     }
     public List<Announcement> getAllAnnouncements_Status_OK() {
-        String contract_status = "Модерировано!";
+//        String contract_status = "Модерировано!";
+        String contract_status = "Опубликовано!";
         return announcementRepository.findAll(contract_status);
     }
     public Announcement getAnnouncementById(Long id) {

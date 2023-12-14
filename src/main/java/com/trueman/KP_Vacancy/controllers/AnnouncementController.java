@@ -103,7 +103,7 @@ public class AnnouncementController {
     {
         Announcement announcement = announcementRepository.findAnnouncementById(id);
 
-        announcement.setContract_status("Модерировано!");
+        announcement.setContract_status("Опубликовано!");
         announcementRepository.save(announcement);
 
         return ResponseEntity.ok("Объявление успешно модерировано!");
